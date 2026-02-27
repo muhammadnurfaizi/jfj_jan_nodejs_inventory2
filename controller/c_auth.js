@@ -5,6 +5,11 @@ module.exports =
 {
 
     form_login: function(req,res) {
+        if (req.session.user){
+            res.redirect("/dashboard")
+            return
+        }
+
         res.render('auth/form-login', {
             req:req,
         })//ejs
@@ -29,9 +34,11 @@ proses_login: async function(req,res){
         if (password_cocok) {
             req.session.user = username_exist
             res.redirect("/dashboard")
-        } else // jika password salah, kita berikan info error + kembalikan ke halaman login
+        } else {
+            // jika password salah, kita berikan info error + kembalikan ke halaman login
                 res.redirect(`/login?msg=password salah`)
-
+        }
+            
     } else {
         //jika tidak ada username nya, kita berikan info eror + kemblaikan ke halaman login 
         res.redirect(`/login?msg=username tidak terdaftar`)
